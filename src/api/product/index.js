@@ -21,7 +21,7 @@ productsRouter.get("/", async (req, res, next) => {
 
     if (req.query.name) query.name = { [Op.iLike]: `%${req.query.name}%` };
     if (req.query.category)
-      query.category = { [Op.iLike]: `%${req.query.name}%` };
+      query.category = { [Op.iLike]: `%${req.query.category}%` };
     if (req.query.price)
       query.price = { [Op.between]: req.query.price.split(",") };
 

@@ -12,6 +12,7 @@ import {
 import productsRouter from "./api/product/index.js";
 import usersRouter from "./api/user/index.js";
 import categoriesRouter from "./api/category/index.js";
+import reviewsRouter from "./api/review/index.js";
 
 const server = express();
 const port = process.env.PORT || 3001;
@@ -28,6 +29,7 @@ server.use(express.json());
 server.use("/products", productsRouter);
 server.use("/users", usersRouter);
 server.use("/categories", categoriesRouter);
+server.use("/reviews", reviewsRouter)
 
 server.use(badRequestErrorHandler);
 server.use(forbiddenErrorHandler);

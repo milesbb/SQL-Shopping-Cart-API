@@ -1,6 +1,7 @@
 import express from "express";
 import createHttpError from "http-errors";
 import { Op } from "sequelize";
+import ReviewModel from "../review/model.js";
 import UserModel from "./model.js";
 
 const usersRouter = express.Router();
@@ -30,6 +31,7 @@ usersRouter.get("/", async (req, res, next) => {
         ...query,
       },
       attributes: req.query.attributes ? req.query.attributes.split(",") : {},
+      include: ["reviews"]
     });
     res.send(users);
   } catch (error) {
@@ -85,5 +87,16 @@ usersRouter.delete("/:userId", async (req, res, next) => {
     next(error);
   }
 });
+
+usersRouter.get("/:userId/reviews", async (req, res, next) => {
+    try {
+      const user = await UsersModel.findByPk(req.params.userId, {
+        include: ["reviews"],
+      })
+      res.send(user)
+    } catch (error) {
+      next(error)
+    }
+  })
 
 export default usersRouter;

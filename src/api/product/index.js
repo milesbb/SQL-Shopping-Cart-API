@@ -38,11 +38,14 @@ productsRouter.get("/", async (req, res, next) => {
         ...query,
       },
       attributes: req.query.attributes ? req.query.attributes.split(",") : {},
-      include: {
-        model: CategoriesModel,
-        attributes: ["name"],
-        through: { attributes: [] },
-      },
+      include: [
+        {
+          model: CategoriesModel,
+          attributes: ["name"],
+          through: { attributes: [] },
+        },
+        "reviews",
+      ],
     });
     res.send(products);
   } catch (error) {
@@ -121,15 +124,26 @@ productsRouter.delete("/:productId", async (req, res, next) => {
 });
 
 productsRouter.post("/:productId/category", async (req, res, next) => {
-    try {
-      const { id } = await ProductsCategoriesModel.create({
-        productId: req.params.productId,
-        categoryId: req.body.categoryId,
-      })
-      res.status(201).send({ id })
-    } catch (error) {
-      next(error)
-    }
-  })
+  try {
+    const { id } = await ProductsCategoriesModel.create({
+      productId: req.params.productId,
+      categoryId: req.body.categoryId,
+    });
+    res.status(201).send({ id });
+  } catch (error) {
+    next(error);
+  }
+});
+
+productsRouter.get("/:productId/reviews", async (req, res, next) => {
+  try {
+    const product = await productsModel.findByPk(req.params.productId, {
+      include: ["reviews"],
+    });
+    res.send(product);
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default productsRouter;

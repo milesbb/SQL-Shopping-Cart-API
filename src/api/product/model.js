@@ -13,10 +13,6 @@ const ProductModel = sequelize.define("product", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  category: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
   description: {
     type: DataTypes.TEXT,
     allowNull: false,

@@ -1,6 +1,7 @@
 import express from "express";
 import createHttpError from "http-errors";
 import { Op } from "sequelize";
+import CategoriesModel from "../category/model.js";
 import ProductModel from "./model.js";
 import ProductsCategoriesModel from "./productsCategoriesModel.js";
 

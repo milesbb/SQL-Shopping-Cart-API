@@ -140,7 +140,12 @@ productsRouter.get("/:productId/reviews", async (req, res, next) => {
     const product = await productsModel.findByPk(req.params.productId, {
       include: ["reviews"],
     });
-    res.send(product);
+
+    if (product) {
+      res.send(product);
+    } else {
+      next(createHttpError(404, `Product not found`));
+    }
   } catch (error) {
     next(error);
   }

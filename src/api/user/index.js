@@ -31,9 +31,15 @@ usersRouter.get("/", async (req, res, next) => {
         ...query,
       },
       attributes: req.query.attributes ? req.query.attributes.split(",") : {},
-      include: ["reviews"]
+      include: ["reviews"],
     });
-    res.send(users);
+
+    if (users) {
+        res.send(users);
+
+    } else {
+        next(createHttpError(404, `users not found`))
+    }
   } catch (error) {
     next(error);
   }
@@ -89,14 +95,18 @@ usersRouter.delete("/:userId", async (req, res, next) => {
 });
 
 usersRouter.get("/:userId/reviews", async (req, res, next) => {
-    try {
-      const user = await UsersModel.findByPk(req.params.userId, {
-        include: ["reviews"],
-      })
-      res.send(user)
-    } catch (error) {
-      next(error)
+  try {
+    const user = await UsersModel.findByPk(req.params.userId, {
+      include: ["reviews"],
+    });
+    if (user) {
+      res.send(user);
+    } else {
+      next(createHttpError(404, "User not found"));
     }
-  })
+  } catch (error) {
+    next(error);
+  }
+});
 
 export default usersRouter;
